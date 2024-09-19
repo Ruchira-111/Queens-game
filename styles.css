@@ -29,11 +29,15 @@ body {
     background-color: yellow;
 }
 
-.region1 { background-color: lightblue; }
-.region2 { background-color: lightgreen; }
-.region3 { background-color: lightcoral; }
-.region4 { background-color: lightgoldenrodyellow; }
-.region5 { background-color: lightpink; }
-.region6 { background-color: lightseagreen; }
-.region7 { background-color: lightsalmon; }
-.region8 { background-color: lightpurple; }
+.region0 { background-color: lightblue; }
+.region1 { background-color: lightgreen; }
+.region2 { background-color: lightcoral; }
+.region3 { background-color: lightgoldenrodyellow; }
+.region4 { background-color: lightpink; }
+.region5 { background-color: lightseagreen; }
+.region6 { background-color: lightsalmon; }
+.region7 { background-color: lightsteelblue; }
+.region8 { background-color: lightcyan; }
+.region9 { background-color: lightgray; }
+.region10 { background-color: lightyellow; }
+.region11 { background-color: lightpurple; }
