@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const board = document.getElementById('board');
+    const showSolutionButton = document.getElementById('showSolutionButton');
     const size = 8;
     let queens = [];
     let solution = [
@@ -75,6 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         queens = [];
     }
 
-    // Show solution after 1 minute
-    setTimeout(showSolution, 60000);
+    // Show solution when button is clicked
+    showSolutionButton.addEventListener('click', showSolution);
 });
