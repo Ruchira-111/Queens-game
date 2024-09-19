@@ -28,3 +28,12 @@ body {
 .queen {
     background-color: yellow;
 }
+
+.region1 { background-color: lightblue; }
+.region2 { background-color: lightgreen; }
+.region3 { background-color: lightcoral; }
+.region4 { background-color: lightgoldenrodyellow; }
+.region5 { background-color: lightpink; }
+.region6 { background-color: lightseagreen; }
+.region7 { background-color: lightsalmon; }
+.region8 { background-color: lightsteelblue; }
