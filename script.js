@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const board = document.getElementById('board');
     const size = 8;
     let queens = [];
+    let solution = [
+        { row: 0, col: 0, region: 0 }, { row: 1, col: 2, region: 1 }, { row: 2, col: 4, region: 2 }, { row: 3, col: 6, region: 3 },
+        { row: 4, col: 1, region: 4 }, { row: 5, col: 3, region: 5 }, { row: 6, col: 5, region: 6 }, { row: 7, col: 7, region: 7 }
+    ];
 
     // Define regions
     const regions = [
@@ -57,4 +61,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return true;
     }
+
+    function showSolution() {
+        clearBoard();
+        for (let queen of solution) {
+            const cell = document.querySelector(`.cell[data-row='${queen.row}'][data-col='${queen.col}']`);
+            cell.classList.add('queen');
+        }
+    }
+
+    function clearBoard() {
+        document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('queen'));
+        queens = [];
+    }
+
+    // Show solution after 1 minute
+    setTimeout(showSolution, 60000);
 });
