@@ -25,8 +25,8 @@ body {
     cursor: pointer;
 }
 
-.queen {
-    background-color: yellow;
+.queen::before {
+    content: "♕";
 }
 
 .region0 { background-color: lightblue; }
