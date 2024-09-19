@@ -1,44 +1,39 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const board = document.getElementById('board');
-    const size = 8;
-    let queens = [];
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
 
-    // Create the board
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.dataset.row = i;
-            cell.dataset.col = j;
-            cell.addEventListener('click', placeQueen);
-            board.appendChild(cell);
-        }
-    }
+#board {
+    display: grid;
+    grid-template-columns: repeat(8, 50px);
+    grid-template-rows: repeat(8, 50px);
+    gap: 5px;
+}
 
-    function placeQueen(event) {
-        const cell = event.target;
-        const row = parseInt(cell.dataset.row);
-        const col = parseInt(cell.dataset.col);
+.cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 
-        if (cell.classList.contains('queen')) {
-            cell.classList.remove('queen');
-            queens = queens.filter(q => q.row !== row || q.col !== col);
-        } else {
-            if (isValidMove(row, col)) {
-                cell.classList.add('queen');
-                queens.push({ row, col });
-            } else {
-                alert('Invalid move!');
-            }
-        }
-    }
+.queen {
+    background-color: yellow;
+}
 
-    function isValidMove(row, col) {
-        for (let queen of queens) {
-            if (queen.row === row || queen.col === col || Math.abs(queen.row - row) === Math.abs(queen.col - col)) {
-                return false;
-            }
-        }
-        return true;
-    }
-});
+.region1 { background-color: lightblue; }
+.region2 { background-color: lightgreen; }
+.region3 { background-color: lightcoral; }
+.region4 { background-color: lightgoldenrodyellow; }
+.region5 { background-color: lightpink; }
+.region6 { background-color: lightseagreen; }
+.region7 { background-color: lightsalmon; }
+.region8 { background-color: lightsteelblue; }
