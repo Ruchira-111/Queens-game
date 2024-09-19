@@ -27,6 +27,8 @@ body {
 
 .queen::before {
     content: "♕";
+    font-size: 24px;
+    color: black;
 }
 
 .region0 { background-color: lightblue; }
