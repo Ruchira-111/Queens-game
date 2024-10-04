@@ -3,8 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showSolutionButton = document.getElementById('showSolutionButton');
     const size = 8;
     let queens = [];
-    let solution = generateSolution(size);
-    let regions = generateRegions(size);
+    let { regions, solution } = generateRegionsAndSolution(size);
 
     // Create the board
     for (let i = 0; i < size; i++) {
@@ -62,38 +61,36 @@ document.addEventListener('DOMContentLoaded', () => {
         queens = [];
     }
 
-    function generateRegions(size) {
+    function generateRegionsAndSolution(size) {
         let regions = Array.from({ length: size }, () => Array(size).fill(0));
-        let regionNumbers = Array.from({ length: size }, (_, i) => i);
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
-                let randomIndex = Math.floor(Math.random() * regionNumbers.length);
-                regions[i][j] = regionNumbers[randomIndex];
-                regionNumbers.splice(randomIndex, 1);
-                if (regionNumbers.length === 0) {
-                    regionNumbers = Array.from({ length: size }, (_, i) => i);
-                }
-            }
-        }
-        return regions;
-    }
-
-    function generateSolution(size) {
         let solution = [];
+        let regionNumber = 0;
+        let regionSize = Math.floor(size / Math.sqrt(size));
+
         let rows = Array.from({ length: size }, (_, i) => i);
         let cols = Array.from({ length: size }, (_, i) => i);
-        let regions = Array.from({ length: size }, (_, i) => i);
+
+        for (let rowStart = 0; rowStart < size; rowStart += regionSize) {
+            for (let colStart = 0; colStart < size; colStart += regionSize) {
+                for (let i = 0; i < regionSize; i++) {
+                    for (let j = 0; j < regionSize; j++) {
+                        regions[rowStart + i][colStart + j] = regionNumber;
+                    }
+                }
+                regionNumber++;
+            }
+        }
 
         for (let i = 0; i < size; i++) {
             let row = rows.splice(Math.floor(Math.random() * rows.length), 1);
             let col = cols.splice(Math.floor(Math.random() * cols.length), 1);
-            let region = regions.splice(Math.floor(Math.random() * regions.length), 1);
+            let region = regions[row][col];
             solution.push({ row, col, region });
         }
-        return solution;
+
+        return { regions, solution };
     }
 
     // Show solution when button is clicked
     showSolutionButton.addEventListener('click', showSolution);
 });
-
