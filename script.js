@@ -65,11 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let regions = Array.from({ length: size }, () => Array(size).fill(0));
         let solution = [];
         let regionNumber = 0;
-        let regionSize = Math.floor(size / Math.sqrt(size));
 
-        let rows = Array.from({ length: size }, (_, i) => i);
-        let cols = Array.from({ length: size }, (_, i) => i);
+        // Define the size of each region block
+        let regionSize = size / 2; // For an 8x8 board, this will be 4
 
+        // Generate regions
         for (let rowStart = 0; rowStart < size; rowStart += regionSize) {
             for (let colStart = 0; colStart < size; colStart += regionSize) {
                 for (let i = 0; i < regionSize; i++) {
@@ -80,6 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 regionNumber++;
             }
         }
+
+        // Ensure each region has one queen
+        let rows = Array.from({ length: size }, (_, i) => i);
+        let cols = Array.from({ length: size }, (_, i) => i);
 
         for (let i = 0; i < size; i++) {
             let row = rows.splice(Math.floor(Math.random() * rows.length), 1);
