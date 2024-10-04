@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showSolutionButton = document.getElementById('showSolutionButton');
     const size = 8;
     let queens = [];
-    let { regions, solution } = generateRegionsAndSolution(size);
+    let { regions, solution } = generateValidRegionsAndSolution(size);
 
     // Create the board
     for (let i = 0; i < size; i++) {
@@ -61,24 +61,55 @@ document.addEventListener('DOMContentLoaded', () => {
         queens = [];
     }
 
+    function generateValidRegionsAndSolution(size) {
+        let regions, solution;
+        do {
+            ({ regions, solution } = generateRegionsAndSolution(size));
+        } while (!isSolutionValid(solution));
+        return { regions, solution };
+    }
+
     function generateRegionsAndSolution(size) {
-        let regions = Array.from({ length: size }, () => Array(size).fill(0));
+        let regions = Array.from({ length: size }, () => Array(size).fill(-1));
         let solution = [];
         let regionNumber = 0;
 
-        // Define the size of each region block
-        let regionSize = size / 2; // For an 8x8 board, this will be 4
+        // Helper function to get neighbors
+        function getNeighbors(row, col) {
+            const neighbors = [];
+            if (row > 0) neighbors.push([row - 1, col]);
+            if (row < size - 1) neighbors.push([row + 1, col]);
+            if (col > 0) neighbors.push([row, col - 1]);
+            if (col < size - 1) neighbors.push([row, col + 1]);
+            return neighbors;
+        }
 
-        // Generate regions
-        for (let rowStart = 0; rowStart < size; rowStart += regionSize) {
-            for (let colStart = 0; colStart < size; colStart += regionSize) {
-                for (let i = 0; i < regionSize; i++) {
-                    for (let j = 0; j < regionSize; j++) {
-                        regions[rowStart + i][colStart + j] = regionNumber;
+        // Assign cells to regions
+        while (regionNumber < size) {
+            let cellsToAssign = Math.floor(size * size / size);
+            let [startRow, startCol] = [Math.floor(Math.random() * size), Math.floor(Math.random() * size)];
+
+            while (regions[startRow][startCol] !== -1) {
+                [startRow, startCol] = [Math.floor(Math.random() * size), Math.floor(Math.random() * size)];
+            }
+
+            let stack = [[startRow, startCol]];
+            regions[startRow][startCol] = regionNumber;
+
+            while (stack.length > 0 && cellsToAssign > 0) {
+                let [row, col] = stack.pop();
+                let neighbors = getNeighbors(row, col).filter(([r, c]) => regions[r][c] === -1);
+
+                for (let [nRow, nCol] of neighbors) {
+                    if (cellsToAssign > 0) {
+                        regions[nRow][nCol] = regionNumber;
+                        stack.push([nRow, nCol]);
+                        cellsToAssign--;
                     }
                 }
-                regionNumber++;
             }
+
+            regionNumber++;
         }
 
         // Ensure each region has one queen
@@ -93,6 +124,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return { regions, solution };
+    }
+
+    function isSolutionValid(solution) {
+        for (let i = 0; i < solution.length; i++) {
+            for (let j = i + 1; j < solution.length; j++) {
+                if (solution[i].row === solution[j].row ||
+                    solution[i].col === solution[j].col ||
+                    Math.abs(solution[i].row - solution[j].row) === Math.abs(solution[i].col - solution[j].col)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     // Show solution when button is clicked
