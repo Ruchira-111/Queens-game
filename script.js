@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let regions, solution;
         do {
             ({ regions, solution } = generateRegionsAndSolution(size));
-        } while (!isSolutionValid(solution));
+        } while (!isSolutionValid(solution, regions));
         return { regions, solution };
     }
 
@@ -126,7 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return { regions, solution };
     }
 
-    function isSolutionValid(solution) {
+    function isSolutionValid(solution, regions) {
+        let regionCount = Array(size).fill(0);
+
         for (let i = 0; i < solution.length; i++) {
             for (let j = i + 1; j < solution.length; j++) {
                 if (solution[i].row === solution[j].row ||
@@ -135,10 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     return false;
                 }
             }
+            regionCount[solution[i].region]++;
         }
-        return true;
+
+        return regionCount.every(count => count === 1);
     }
 
     // Show solution when button is clicked
     showSolutionButton.addEventListener('click', showSolution);
 });
+
