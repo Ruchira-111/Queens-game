@@ -146,5 +146,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show solution when button is clicked
     showSolutionButton.addEventListener('click', showSolution);
 });
-
-
