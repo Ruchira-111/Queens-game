@@ -28,32 +28,24 @@ document.addEventListener('DOMContentLoaded', () => {
             cell.classList.remove('queen');
             queens = queens.filter(q => q.row !== row || q.col !== col);
         } else {
-            const validation = isValidMove(row, col, region);
-            if (validation.isValid) {
+            if (isValidMove(row, col, region)) {
                 cell.classList.add('queen');
                 queens.push({ row, col, region });
             } else {
-                alert(`Invalid move! ${validation.message}`);
+                alert('Invalid move!');
             }
         }
     }
 
     function isValidMove(row, col, region) {
         for (let queen of queens) {
-            if (queen.row === row) {
-                return { isValid: false, message: 'Another queen is in the same row.' };
-            }
-            if (queen.col === col) {
-                return { isValid: false, message: 'Another queen is in the same column.' };
-            }
-            if (queen.region === region) {
-                return { isValid: false, message: 'Another queen is in the same region.' };
-            }
-            if (Math.abs(queen.row - row) === 1 && Math.abs(queen.col - col) === 1) {
-                return { isValid: false, message: 'Another queen is immediately diagonally adjacent.' };
+            if (queen.row === row || queen.col === col || queen.region === region ||
+                Math.abs(queen.row - row) === Math.abs(queen.col - col) ||
+                Math.abs(queen.row - row) <= 1 && Math.abs(queen.col - col) <= 1) {
+                return false;
             }
         }
-        return { isValid: true, message: '' };
+        return true;
     }
 
     function showSolution() {
@@ -73,10 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let regions, solution;
         do {
             ({ regions, solution } = generateRegionsAndSolution(size));
-        } while (!isSolutionValid(solution, regions));
+        } while (!isSolutionValid(solution));
         return { regions, solution };
     }
-
     function generateRegionsAndSolution(size) {
         let regions = Array.from({ length: size }, () => Array(size).fill(-1));
         let solution = [];
@@ -91,23 +82,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (col < size - 1) neighbors.push([row, col + 1]);
             return neighbors;
         }
-
         // Assign cells to regions
         while (regionNumber < size) {
             let cellsToAssign = Math.floor(size * size / size);
             let [startRow, startCol] = [Math.floor(Math.random() * size), Math.floor(Math.random() * size)];
-
             while (regions[startRow][startCol] !== -1) {
                 [startRow, startCol] = [Math.floor(Math.random() * size), Math.floor(Math.random() * size)];
             }
-
             let stack = [[startRow, startCol]];
             regions[startRow][startCol] = regionNumber;
 
             while (stack.length > 0 && cellsToAssign > 0) {
                 let [row, col] = stack.pop();
                 let neighbors = getNeighbors(row, col).filter(([r, c]) => regions[r][c] === -1);
-
                 for (let [nRow, nCol] of neighbors) {
                     if (cellsToAssign > 0) {
                         regions[nRow][nCol] = regionNumber;
@@ -116,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-
             regionNumber++;
         }
 
@@ -134,23 +120,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return { regions, solution };
     }
 
-    function isSolutionValid(solution, regions) {
-        let regionCount = Array(size).fill(0);
-
+    function isSolutionValid(solution) {
         for (let i = 0; i < solution.length; i++) {
             for (let j = i + 1; j < solution.length; j++) {
                 if (solution[i].row === solution[j].row ||
                     solution[i].col === solution[j].col ||
-                    (Math.abs(solution[i].row - solution[j].row) === 1 && Math.abs(solution[i].col - solution[j].col) === 1)) {
+                    Math.abs(solution[i].row - solution[j].row) === Math.abs(solution[i].col - solution[j].col)) {
                     return false;
                 }
             }
-            regionCount[solution[i].region]++;
         }
-
-        return regionCount.every(count => count === 1);
+        return true;
     }
-
     // Show solution when button is clicked
     showSolutionButton.addEventListener('click', showSolution);
 });
